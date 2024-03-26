@@ -17,14 +17,16 @@ char *get_next_line(int fd)
     ssize_t bytes_read;
 
     buf = malloc(BUFFER_SIZE + 1);
-    while ((newline_pos = strchr(remainder, '\n')) == NULL)
-    {
-        bytes_read = read(fd, buf, BUFFER_SIZE);
-        if (bytes_read <= 0)
-            break;
-        buf[bytes_read] = '\0';
-        strncat(remainder, buf, bytes_read);
-    }
+    newline_pos = strchr(remainder, '\n');
+
+while (newline_pos == NULL) {
+    bytes_read = read(fd, buf, BUFFER_SIZE);
+    if (bytes_read <= 0)
+        break;
+    buf[bytes_read] = '\0';
+    strncat(remainder, buf, bytes_read);
+    newline_pos = strchr(remainder, '\n');
+}
     free(buf);
 
     char *line = NULL;
